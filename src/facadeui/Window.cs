@@ -31,7 +31,10 @@ namespace FacadeUI
 
                 _window = VeldridStartup.CreateWindow(windowCI);
                 _graphicsDevice = VeldridStartup.CreateGraphicsDevice(_window);
-            // _View = new MyView();
+                _window.BorderVisible = false;
+                
+
+                // _View = new MyView();
 
                 //_View.Initialize(_Window, _graphicsDevice);
 

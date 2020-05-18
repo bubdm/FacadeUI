@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\facadeui\facadeui.csproj" />
+    <ProjectReference Include="..\..\src\FacadeUI\FacadeUI.csproj" />
   </ItemGroup>
 
 </Project>
