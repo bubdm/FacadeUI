@@ -41,7 +41,24 @@ namespace FacadeUI
         }
         protected virtual void OnHide() {}
 
-        
+        protected void Draw()
+        {
+            //--TODO: Setup transforms and build an actual draw context
+            OnPreDraw() ;
+
+            OnDraw() ;
+
+            foreach(var child in _children)
+            {
+                child.Draw() ;
+            }
+
+            OnPostDraw() ;
+        }
+
+        protected virtual void OnPreDraw() {}
+        protected virtual void OnDraw() {}
+        protected virtual void OnPostDraw() {}
 
         #endregion
 
