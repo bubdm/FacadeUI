@@ -6,15 +6,59 @@ using FacadeUI.Utility;
 namespace FacadeUI
 {
     public class UIObject
+    : IDisposable
     {
+        
         public string Id {get;set;} = string.Empty ;
         public Rectangle Bounds {get; set;} 
 
         public UIObject Parent {get; private set;}  //--TODO: Think through this better... Last iteration had some complex Attach()/Detach() logic, do we need it here too?
 
+        #region Housekeeping
+        private bool disposedValue;
+
+        public UIObject()
+        {
+        }
+ 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // Invoke the destroy call
+                    OnDestroy() ;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~UIObject()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }       
+        #endregion
+
         #region Lifecycle Management
 
         protected virtual void OnCreate() {}    // OnDestroy()?
+
+        protected virtual void OnLoadResources() {}
+
+        protected virtual void OnDestroy() {}
 
         #endregion
 
@@ -41,6 +85,9 @@ namespace FacadeUI
         }
         protected virtual void OnHide() {}
 
+        #endregion
+
+        #region Drawing
         protected void Draw()
         {
             //--TODO: Setup transforms and build an actual draw context
@@ -62,11 +109,13 @@ namespace FacadeUI
 
         #endregion
 
+
         #region Child Management
         //--TODO: Address this design later.. It feels too low-level to expose like this
         //        Maybe use a ViewBuilder pattern or something to help put everything together
         //        with an object factory that can instantiate everything.
         private List<UIObject> _children = new List<UIObject>() ;
+
         public IEnumerable<UIObject> Children {get{return _children;}}
 
         public int AddChild(string id, UIObject child)
@@ -98,6 +147,7 @@ namespace FacadeUI
         {
             _children.Clear() ;
         }
+
         #endregion
     }
 }
