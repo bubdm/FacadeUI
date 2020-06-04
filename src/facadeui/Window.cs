@@ -36,6 +36,9 @@ namespace FacadeUI
 
                 _window = VeldridStartup.CreateWindow(windowCI);
                 _graphicsDevice = VeldridStartup.CreateGraphicsDevice(_window);
+
+                (Shader vs, Shader fs) = Utility.ShaderHelper.LoadSPIRV(_graphicsDevice, _graphicsDevice.ResourceFactory, "roundedquad"); 
+
                 //--_window.BorderVisible = false; -- This is nice for a future state where we can render the title bar better...
                                 
                 // _View = new MyView();

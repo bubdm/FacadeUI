@@ -431,3 +431,9 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+##
+## Shader SPIRV Code Output files
+## These are all built and included as content into the final product
+##
+*.spv

@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="veldrid" Version="4.7.0" />
@@ -10,5 +12,41 @@
     <PackageReference Include="veldrid.StartupUtilities" Version="4.7.0" />
     <PackageReference Include="veldrid.utilities" Version="4.7.0" />
   </ItemGroup>
+
+
+  <!--Compile all .vert & .frag files as shaders into cross-platform
+      spirv bytecode files using the 3rd party tool glslangvalidator.
+
+      TODO: Investigate the veldrid.SPIRV library to see if it could power
+            a custom MSBuild task (ITask) rather than rely on 3rd-party
+            tool in PATH
+      
+      Then embed the shaders as a resource into the project.  Allows 
+      shader code to be edited and built via the normal dotnet build process.
+
+      TODO: Add the .spv files to the dotnet clean process
+
+      TODO: Find a way to put the .spv files into the intermediate obj folder.  Simple attempts result
+            in errors trying to create the output files.  Permission issue? -->  
+  <ItemGroup>
+    <ShaderFiles Include="**\*.vert">
+      <ShaderType>Vertex</ShaderType>
+    </ShaderFiles>
+    <ShaderFiles Include="**\*.frag">
+      <ShaderType>Fragment</ShaderType>
+    </ShaderFiles>
+  </ItemGroup>
+  <Target Name="CompileShaders"
+          Inputs="@(ShaderFiles)"
+          Outputs="@(ShaderFiles->'%(identity).spv')" 
+          BeforeTargets="BeforeBuild">
+        <Message Importance="high" Text="Building Shader %(ShaderFiles.Identity)" />
+        <Exec Command="glslangvalidator -V %(ShaderFiles.Identity) -o @(ShaderFiles->'%(identity).spv')"/>
+  </Target>
+  <Target Name="IncludeShaders" AfterTargets="CompileShaders">
+    <CreateItem Include="**\*.spv">
+        <Output ItemName="EmbeddedResource" TaskParameter="Include" />
+    </CreateItem>
+  </Target>
 
 </Project>

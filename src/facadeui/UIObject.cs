@@ -12,8 +12,6 @@ namespace FacadeUI
         public string Id {get;set;} = string.Empty ;
         public Rectangle Bounds {get; set;} 
 
-        public UIObject Parent {get; private set;}  //--TODO: Think through this better... Last iteration had some complex Attach()/Detach() logic, do we need it here too?
-
         #region Housekeeping
         private bool disposedValue;
 
@@ -123,7 +121,7 @@ namespace FacadeUI
             int index = _children.Count ;
 
             // may need some guards around this in the future
-            child.Parent = this ;
+            //child.Parent = this ;
 
             _children.Add(child) ;
 
