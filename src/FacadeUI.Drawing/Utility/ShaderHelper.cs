@@ -4,7 +4,7 @@ using System.Text;
 using Veldrid;
 using Veldrid.SPIRV;
 
-namespace FacadeUI.Utility
+namespace FacadeUI.Drawing.Utility
 {
     class ShaderHelper
     {
