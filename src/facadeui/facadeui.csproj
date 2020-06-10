@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="veldrid" Version="4.7.0" />
-    <PackageReference Include="veldrid.SPIRV" Version="1.0.13" />
     <PackageReference Include="veldrid.StartupUtilities" Version="4.7.0" />
     <PackageReference Include="veldrid.utilities" Version="4.7.0" />
   </ItemGroup>
@@ -35,13 +34,14 @@
     <ShaderFiles Include="**\*.frag">
       <ShaderType>Fragment</ShaderType>
     </ShaderFiles>
+  </ItemGroup>  
+  <ItemGroup>
+    <ProjectReference Include="..\FacadeUI.Drawing\FacadeUI.Drawing.csproj" />
+    <ProjectReference Include="..\FacadeUI.Utility\FacadeUI.Utility.csproj" />
   </ItemGroup>
-  <Target Name="CompileShaders"
-          Inputs="@(ShaderFiles)"
-          Outputs="@(ShaderFiles->'%(identity).spv')" 
-          BeforeTargets="BeforeBuild">
+  <Target Name="CompileShaders" Inputs="@(ShaderFiles)" Outputs="@(ShaderFiles->'%(identity).spv')" BeforeTargets="BeforeBuild">
         <Message Importance="high" Text="Building Shader %(ShaderFiles.Identity)" />
-        <Exec Command="glslangvalidator -V %(ShaderFiles.Identity) -o @(ShaderFiles->'%(identity).spv')"/>
+        <Exec Command="glslangvalidator -V %(ShaderFiles.Identity) -o @(ShaderFiles->'%(identity).spv')" />
   </Target>
   <Target Name="IncludeShaders" AfterTargets="CompileShaders">
     <CreateItem Include="**\*.spv">
